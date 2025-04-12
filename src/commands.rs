@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use crate::{builder, file};
 
 const BASE_HTML: &str = include_str!("template_files/base.html");
@@ -28,7 +30,7 @@ pub fn build() {
 
     println!("Building the site...");
 
-    if let Err(error) = builder::build() {
+    if let Err(error) = builder::build(Path::new(".")) {
         println!("Failed to build site: {}", error);
     }
 

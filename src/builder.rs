@@ -3,9 +3,8 @@ use std::{io, path::Path};
 
 // TODO: Read these from rustypages.toml
 const OUT_DIR: &str = "dist/";
-const CONTENT_DIR: &str = "content/";
 
-pub fn build() -> io::Result<()> {
+pub fn build(path: &Path) -> io::Result<()> {
     fn visit_dir(dir: &Path, content_root: &Path, output_root: &Path) -> io::Result<()> {
         for entry in std::fs::read_dir(dir)? {
             let entry = entry?;
@@ -29,8 +28,10 @@ pub fn build() -> io::Result<()> {
         Ok(())
     }
 
-    let content_path = Path::new(CONTENT_DIR);
-    let output_path = Path::new(OUT_DIR);
+    let output_path_buf = path.join(OUT_DIR);
+    let output_path = output_path_buf.as_path();
+    let content_path_buf = path.join("content");
+    let content_path = content_path_buf.as_path();
     visit_dir(content_path, content_path, output_path)
 }
 
@@ -43,7 +44,7 @@ fn to_output_path(
     content_root: &Path,
     output_root: &Path,
 ) -> io::Result<std::path::PathBuf> {
-    let relative_path = file_path.strip_prefix(content_root).unwrap_or(Path::new("."));
+    let relative_path = file_path.strip_prefix(content_root).unwrap();
     let mut new_path = output_root.join(relative_path);
     new_path.set_extension("html");
     Ok(new_path)
