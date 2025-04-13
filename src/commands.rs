@@ -33,7 +33,6 @@ pub fn build() {
     if let Err(error) = builder::build(Path::new(".")) {
         println!("Failed to build site: {}", error);
     }
-
 }
 
 pub fn clean() {

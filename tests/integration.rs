@@ -49,12 +49,8 @@ fn multiple_pages_are_rendered_correctly() {
 
     builder::build(site_dir).unwrap();
 
-    let files = [
-        "dist/index.html",
-        "dist/about.html",
-        "dist/blog/post1.html",
-        "dist/blog/post2.html",
-    ];
+    let files =
+        ["dist/index.html", "dist/about.html", "dist/blog/post1.html", "dist/blog/post2.html"];
 
     for file in files.iter() {
         let path = site_dir.join(file);
