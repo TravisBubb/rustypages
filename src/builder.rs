@@ -1,10 +1,13 @@
-use crate::writer;
+use crate::{
+    pipeline::{self, Error, LoadConfigStage},
+    writer,
+};
 use std::{io, path::Path};
 
 // TODO: Read these from rustypages.toml
 const OUT_DIR: &str = "dist/";
 
-pub fn build(path: &Path) -> io::Result<()> {
+pub fn build(path: &Path) -> Result<(), Error> {
     fn visit_dir(dir: &Path, content_root: &Path, output_root: &Path) -> io::Result<()> {
         for entry in std::fs::read_dir(dir)? {
             let entry = entry?;
@@ -27,12 +30,19 @@ pub fn build(path: &Path) -> io::Result<()> {
         }
         Ok(())
     }
+    /*
 
     let output_path_buf = path.join(OUT_DIR);
     let output_path = output_path_buf.as_path();
     let content_path_buf = path.join("content");
     let content_path = content_path_buf.as_path();
     visit_dir(content_path, content_path, output_path)
+    */
+
+    let mut pipeline = pipeline::Pipeline::new();
+    pipeline.add(LoadConfigStage::new("rustypages.toml"));
+
+    pipeline.run()
 }
 
 fn is_markdown_file(path: &Path) -> bool {
