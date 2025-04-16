@@ -1,5 +1,5 @@
 #[derive(Debug)]
-pub enum Error {
+pub enum PipelineError {
     Io(std::io::Error),
     ConfigLoad(String),
     FrontMatter(String),
@@ -8,25 +8,25 @@ pub enum Error {
     Other(String),
 }
 
-impl std::fmt::Display for Error {
+impl std::fmt::Display for PipelineError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Error::Io(e) => write!(f, "IO error: {}", e),
-            Error::ConfigLoad(msg) => write!(f, "Config load error: {}", msg),
-            Error::FrontMatter(msg) => write!(f, "Frontmatter error: {}", msg),
-            Error::Render(msg) => write!(f, "Render error: {}", msg),
-            Error::StageFailed { stage, message } => {
+            PipelineError::Io(e) => write!(f, "IO error: {}", e),
+            PipelineError::ConfigLoad(msg) => write!(f, "Config load error: {}", msg),
+            PipelineError::FrontMatter(msg) => write!(f, "Frontmatter error: {}", msg),
+            PipelineError::Render(msg) => write!(f, "Render error: {}", msg),
+            PipelineError::StageFailed { stage, message } => {
                 write!(f, "Stage '{}' failed: {}", stage, message)
             }
-            Error::Other(msg) => write!(f, "{}", msg),
+            PipelineError::Other(msg) => write!(f, "{}", msg),
         }
     }
 }
 
-impl std::error::Error for Error {}
+impl std::error::Error for PipelineError {}
 
-impl From<std::io::Error> for Error {
+impl From<std::io::Error> for PipelineError {
     fn from(err: std::io::Error) -> Self {
-        Error::Io(err)
+        PipelineError::Io(err)
     }
 }

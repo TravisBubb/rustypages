@@ -11,8 +11,8 @@ pub struct SiteConfig {
     pub content_dir: String,
     #[serde(default = "default_build_dir")]
     pub build_dir: String,
-    #[serde(default = "default_templates")]
-    pub templates: String,
+    #[serde(default = "default_template_dir")]
+    pub template_dir: String,
     #[serde(default = "default_base_url")]
     pub base_url: String,
 }
@@ -36,7 +36,7 @@ fn default_build_dir() -> String {
     "dist".into()
 }
 
-fn default_templates() -> String {
+fn default_template_dir() -> String {
     "templates".into()
 }
 

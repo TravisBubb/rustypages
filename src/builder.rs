@@ -1,5 +1,5 @@
 use crate::{
-    pipeline::{self, Error, LoadConfigStage},
+    pipeline::{self, LoadConfigStage, LoadTemplatesStage, PipelineError},
     writer,
 };
 use std::{io, path::Path};
@@ -7,7 +7,7 @@ use std::{io, path::Path};
 // TODO: Read these from rustypages.toml
 const OUT_DIR: &str = "dist/";
 
-pub fn build(path: &Path) -> Result<(), Error> {
+pub fn build(path: &Path) -> Result<(), PipelineError> {
     fn visit_dir(dir: &Path, content_root: &Path, output_root: &Path) -> io::Result<()> {
         for entry in std::fs::read_dir(dir)? {
             let entry = entry?;
@@ -41,6 +41,7 @@ pub fn build(path: &Path) -> Result<(), Error> {
 
     let mut pipeline = pipeline::Pipeline::new();
     pipeline.add(LoadConfigStage::new("rustypages.toml"));
+    pipeline.add(LoadTemplatesStage::new());
 
     pipeline.run()
 }
